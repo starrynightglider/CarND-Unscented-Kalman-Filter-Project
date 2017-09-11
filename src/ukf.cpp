@@ -20,10 +20,10 @@ UKF::UKF(): is_initialized_(false),
             P_(MatrixXd(n_x_, n_x_)),
             Xsig_pred_(MatrixXd(n_x_, 2*n_aug_+1)),
             weights_(VectorXd(2*n_aug_+1)),
-            std_a_(1.5),
-            std_yawdd_(0.57),
-            std_lidar_px_(0.15),
-            std_lidar_py_(0.15),
+            std_a_(1.8),
+            std_yawdd_(0.35),
+            std_lidar_px_(0.125),
+            std_lidar_py_(0.125),
             std_radar_r_(0.3),
             std_radar_phi_(0.03),
             std_radar_rd_(0.3),
@@ -175,7 +175,7 @@ void UKF::updateLidar(MeasurementPackage meas_package) {
 
   MatrixXd H_ = MatrixXd(2, 5);
   H_<<1,0,0,0,0,
-            0,1,0,0,0;
+      0,1,0,0,0;
   VectorXd z_pred = H_* x_;
   VectorXd z_diff = z - z_pred;
   VectorXd y = z - z_pred;
@@ -183,7 +183,7 @@ void UKF::updateLidar(MeasurementPackage meas_package) {
   MatrixXd R_=MatrixXd(2,2);
 
   R_<< std_lidar_px_,0,
-             0,std_lidar_py_;
+       0,std_lidar_py_;
 
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
